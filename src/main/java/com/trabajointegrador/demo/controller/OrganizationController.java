@@ -31,8 +31,8 @@ public class OrganizationController {
     public ResponseEntity<Organization> updateById(@PathVariable Long id,@RequestBody Organization organization){
         return ResponseEntity.ok(organizationService.updateOrganization(id, organization));
     }
-    @GetMapping("/{page}")
-    public ResponseEntity<List<Organization>> getListPage(@RequestParam Integer page){
-        return ResponseEntity.ok(organizationService.listOfOrganization(page));
-    }
+//    @GetMapping("/{page}")
+//    public ResponseEntity<List<Organization>> getListPage(@RequestParam Integer page){
+//        return ResponseEntity.ok(organizationService.listOfOrganization(page));
+//    }
 }
