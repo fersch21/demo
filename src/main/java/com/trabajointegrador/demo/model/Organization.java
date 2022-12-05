@@ -17,9 +17,9 @@ import java.util.List;
 @NoArgsConstructor
 
     public class Organization {
-        @javax.persistence.Id
+        @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long Id;
+        private Long id;
         private String nombre;
         @Column(unique = true)
         private String cuit;
