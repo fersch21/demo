@@ -1,5 +1,6 @@
 package com.trabajointegrador.demo.service;
 
+import com.trabajointegrador.demo.dto.PersonasDto;
 import com.trabajointegrador.demo.model.Personas;
 
 import java.util.List;
@@ -7,14 +8,15 @@ import java.util.Map;
 
 public interface PersonasService {
 
-    Personas createPersonas (Personas personas);
+    PersonasDto createPersonas (PersonasDto personas);
 
-    Personas findPersonasFindId (Long id);
+    PersonasDto findPersonasFindId (Long id);
+
 
     Map<String, String> deleteById (Long id);
 
-    Personas updatePersonas (Long id, Personas personas);
+    PersonasDto updatePersonas (Long id, PersonasDto personas);
 
-    List<Personas> listOfPersonas (Integer page);
+    List<PersonasDto> listOfPersonas (Integer page);
 
 }
