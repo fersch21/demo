@@ -33,4 +33,6 @@ Turno: El turno tendrá la fecha y hora en caso de que corresponda por ejemplo p
 
 
 DIAGRAMA MER.-
+
+
 ![image](https://user-images.githubusercontent.com/102974719/207161608-ba790fa4-85c9-4077-955f-65f356be10c2.png)
