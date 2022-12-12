@@ -1,9 +1,11 @@
 package com.trabajointegrador.demo.serviceImpl;
 
-import com.trabajointegrador.demo.dto.OrganizationDto;
+import com.trabajointegrador.demo.dto.ClaveForm;
+import com.trabajointegrador.demo.dto.ClaveUpdate;
 import com.trabajointegrador.demo.dto.PersonasDto;
+import com.trabajointegrador.demo.exception.BadRequestException;
+import com.trabajointegrador.demo.exception.MessageCustom;
 import com.trabajointegrador.demo.exception.NotFoundException;
-import com.trabajointegrador.demo.model.Organization;
 import com.trabajointegrador.demo.model.Personas;
 import com.trabajointegrador.demo.repository.PersonasRepository;
 import com.trabajointegrador.demo.service.PersonasService;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,11 +30,12 @@ public class PersonasImpl implements PersonasService {
     @Override
     public PersonasDto createPersonas (PersonasDto dto)
     {
-     Personas entity = modelMapper.map(dto, Personas.class);
-     Personas personasSaved = personasRepository.save(entity);
-     personasSaved.setClave(null);
-     PersonasDto personasDto = modelMapper.map(personasSaved, PersonasDto.class);
-     return personasDto;
+        dto.setId(null);
+        Personas entity = modelMapper.map(dto, Personas.class);
+        Personas personasSaved = personasRepository.save(entity);
+        personasSaved.setClave(null);
+        PersonasDto personasDto = modelMapper.map(personasSaved, PersonasDto.class);
+        return personasDto;
     }
     @Override
 
@@ -43,31 +47,46 @@ public class PersonasImpl implements PersonasService {
 
 
     public Personas findEntityById(Long id){
-            return personasRepository.findById(id).orElseThrow(()-> new NotFoundException("no se cuentra la persona con el " + id));
+            return personasRepository.findById(id).orElseThrow(()-> new NotFoundException("no se cuentra la persona " + id));
         }
-
 
     @Override
 
-   public Map<String, String> deleteById(Long id) {
-        personasRepository.delete(findEntityById(id));
-        return Map.of("Message", "la persona id " + id + " ha sido eliminada");
+   public Map<String, String> deleteById(Long id, ClaveForm claveForm) {
+        Personas personaFound = findEntityById(id);
+        isClaveCorrect(personaFound, claveForm.getClave());
+        personasRepository.delete(personaFound);
+        return new HashMap<String, String>(){{put("Message", "la persona id " + id + " ha sido eliminada");}};
     }
 
     @Override
     public PersonasDto updatePersonas(Long id, PersonasDto dto)  {
-            Personas personasFound = findEntityById(id);
-            modelMapper.getConfiguration().setSkipNullEnabled(true);
-            modelMapper.map(dto, personasFound);
-            Personas personasSaved = personasRepository.save(personasFound);
-            personasSaved.setClave(null);
-            return modelMapper.map(personasSaved, PersonasDto.class);
+        dto.setId(null);
+        Personas personasFound = findEntityById(id);
+        isClaveCorrect(personasFound, dto.getClave());
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
+        modelMapper.map(dto, personasFound);
+        Personas personasSaved = personasRepository.save(personasFound);
+        personasSaved.setClave(null);
+        return modelMapper.map(personasSaved, PersonasDto.class);
     }
 
-   public final Integer SIZE_PAGE = 20;
+    @Override
+    public MessageCustom updateClave(Long idPersona, ClaveUpdate claveUdpate){
+        Personas personaFound = findEntityById(idPersona);
+        isClaveCorrect(personaFound, claveUdpate.getOldClave());
+        return new MessageCustom("clave modificada exitosamente", "200");
+    }
+    @Override
+    public void isClaveCorrect(Personas persona, String clave){
+        if(!persona.getClave().equals(clave)) throw new BadRequestException("clave incorrecta");
+    }
+    public final Integer SIZE_PAGE = 20;
 
-   @Override
-   public List<PersonasDto> listOfPersonas(Integer page) {
-        return personasRepository.findAll(PageRequest.of(page, SIZE_PAGE)).map(personas -> modelMapper.map(personas, PersonasDto.class)).getContent();
+    @Override
+    public List<PersonasDto> listOfPersonas(Integer page) {
+        List<PersonasDto> dtoList = personasRepository.findAll(PageRequest.of(page, SIZE_PAGE)).map(personas -> modelMapper.map(personas, PersonasDto.class)).getContent();
+        dtoList.forEach(dto-> dto.setClave(null));
+        return dtoList;
     }
 }

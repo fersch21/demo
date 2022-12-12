@@ -4,18 +4,17 @@ import com.trabajointegrador.demo.dto.ClaveForm;
 import com.trabajointegrador.demo.dto.EventoDto;
 import com.trabajointegrador.demo.exception.MessageCustom;
 import com.trabajointegrador.demo.model.Evento;
-import com.trabajointegrador.demo.model.Periodicidad;
 
 import java.util.List;
-import java.util.Map;
 
 public interface EventoService {
-    EventoDto createEvento (EventoDto evento);
+    EventoDto createEvento (Long idOrg, EventoDto evento);
     EventoDto findEventoFindId(Long id);
-    MessageCustom deleteById(Long id, ClaveForm claveForm);
-    EventoDto updateEvento(Long id, EventoDto evento);
+    MessageCustom deleteById(Long idOrg, Long id, ClaveForm claveForm);
+    EventoDto updateEvento(Long idOrg, Long id, EventoDto evento);
     List<EventoDto> listOfEvento(Integer page);
 
+    Evento findEntityById (Long id);
 //    debo implementar en enum periodicidad.-
 }
 

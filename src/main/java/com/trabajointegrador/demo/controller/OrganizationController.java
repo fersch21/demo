@@ -1,7 +1,9 @@
 package com.trabajointegrador.demo.controller;
 
+import com.trabajointegrador.demo.dto.ClaveForm;
+import com.trabajointegrador.demo.dto.ClaveUpdate;
 import com.trabajointegrador.demo.dto.OrganizationDto;
-import com.trabajointegrador.demo.model.Organization;
+import com.trabajointegrador.demo.exception.MessageCustom;
 import com.trabajointegrador.demo.service.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +24,8 @@ public class OrganizationController {
         return ResponseEntity.status(201).body(organizationService.createOrganization(organization));
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, String>> deleteById(@PathVariable Long id){
-        return ResponseEntity.ok(organizationService.deleteById(id));
+    public ResponseEntity<Map<String, String>> deleteById(@PathVariable Long id, @RequestBody ClaveForm clave) {
+        return ResponseEntity.ok(organizationService.deleteById(id, clave));
     }
     @PutMapping("/{id}")
     public ResponseEntity<OrganizationDto> updateById(@PathVariable Long id,@RequestBody OrganizationDto organization){
@@ -37,5 +39,9 @@ public class OrganizationController {
     @GetMapping("/{id}")
     public ResponseEntity<OrganizationDto> findById(@PathVariable Long id){
         return ResponseEntity.ok(organizationService.findOrganizationFindId(id));
+    }
+    @PutMapping("/{id}/clave")
+    public ResponseEntity<MessageCustom> updateClave(@PathVariable Long id, @RequestBody ClaveUpdate claveUpdate){
+        return ResponseEntity.ok(organizationService.updateClave(id, claveUpdate));
     }
 }

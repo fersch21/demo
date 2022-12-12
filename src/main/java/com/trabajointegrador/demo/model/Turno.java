@@ -6,8 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalTime;
 
 @Data
 @AllArgsConstructor @NoArgsConstructor
@@ -17,12 +16,12 @@ public class Turno {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDate fechaTurno;
-    private LocalDateTime horaTurno;
+    private LocalTime horaTurno;
     @ManyToOne
     @JoinColumn(referencedColumnName = "id", name = "evento_id")
     private Evento evento;
     @ManyToOne
-    @JoinColumn(name = "personas_id", referencedColumnName = "id")
+    @JoinColumn(name = "persona_id", referencedColumnName = "id")
     private Personas persona;
 
 }

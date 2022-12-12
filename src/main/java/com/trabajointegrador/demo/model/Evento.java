@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Data
@@ -20,9 +20,8 @@ public class Evento {
     private Long id;
     private String nombre;
     private String ubicacion;
-    @NotBlank(message = "no puede estar vacio")
     @Enumerated(value = EnumType.STRING)
-    private Estado activo;
+    private Estado estado;
     @CreationTimestamp
     private LocalDate fechaAlta;
     @Enumerated(value = EnumType.STRING)
@@ -32,4 +31,6 @@ public class Evento {
     private Organization organization;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "evento")
     private List<Turno> turnos;
+    private LocalDate fecha;
+    private LocalTime hora;
 }

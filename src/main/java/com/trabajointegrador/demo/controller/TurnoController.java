@@ -1,7 +1,7 @@
 package com.trabajointegrador.demo.controller;
 
+import com.trabajointegrador.demo.dto.ClaveForm;
 import com.trabajointegrador.demo.dto.TurnoDto;
-import com.trabajointegrador.demo.model.Turno;
 import com.trabajointegrador.demo.service.TurnoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,17 +17,17 @@ public class TurnoController {
     @Autowired
     private TurnoService turnoService;
 
-    @PostMapping
-    public ResponseEntity<TurnoDto> create(@Valid @RequestBody TurnoDto turno){
-        return ResponseEntity.status(201).body(turnoService.createTurno(turno));
+    @PostMapping("/evento/{idEvento}/persona/{idPersona}")
+    public ResponseEntity<TurnoDto> create(@PathVariable Long idEvento, @PathVariable Long idPersona, @Valid @RequestBody TurnoDto turno){
+        return ResponseEntity.status(201).body(turnoService.createTurno(idEvento, idPersona, turno));
     }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, String>> deleteById(@PathVariable Long id){
-        return ResponseEntity.ok(turnoService.deleteById(id));
+    @DeleteMapping("/{id}/persona/{idPersona}")
+    public ResponseEntity<Map<String, String>> deleteById(@PathVariable Long id, @PathVariable Long idPersona,@RequestBody ClaveForm clave){
+        return ResponseEntity.ok(turnoService.deleteById(clave, id, idPersona));
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<TurnoDto> updateById(@PathVariable Long id,@RequestBody TurnoDto turno){
-        return ResponseEntity.ok(turnoService.updateTurno(id, turno));
+    @PutMapping("/{id}/persona/{idPersona}")
+    public ResponseEntity<TurnoDto> updateById(@PathVariable Long id,@PathVariable Long idPersona, @RequestBody TurnoDto turno){
+        return ResponseEntity.ok(turnoService.updateTurno(id, turno, idPersona));
     }
     @GetMapping
     public ResponseEntity<List<TurnoDto>> getListPage(@RequestParam Integer page){
