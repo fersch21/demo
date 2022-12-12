@@ -31,3 +31,4 @@ Turno: El turno tendrá la fecha y hora en caso de que corresponda por ejemplo p
 ●	El controlador de la empresa va a tener un método para registrar una empresa, modificar una empresa o eliminar una empresa (solicitará clave para las últimas 2 nombradas.), un método para traer los datos de una empresa activa según su cuit o nombre, y un método para traer todas las empresas registradas activas.
 ●	El controlador del usuario podrá dar de alta un usuario, modificar o eliminarlo y deberá validar la clave del mismo en las últimas 2. Un método que traiga todos los usuarios activos y un método que traiga un usuario por dni.
 
+![image](https://user-images.githubusercontent.com/102974719/207161608-ba790fa4-85c9-4077-955f-65f356be10c2.png)
