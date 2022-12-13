@@ -18,7 +18,6 @@ public interface PersonasService {
     Personas findEntityById (Long id);
 
 
-
     Map<String, String> deleteById (Long id, ClaveForm claveForm);
 
     PersonasDto updatePersonas (Long id, PersonasDto personas);

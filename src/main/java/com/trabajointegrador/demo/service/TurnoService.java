@@ -11,13 +11,13 @@ import java.util.Map;
 
 public interface TurnoService {
 
-    TurnoDto createTurno (Long idEvento, Long idPersona, TurnoDto turno);
+    TurnoDto createTurno (Long idEvento, Long idOrganization, TurnoDto turno);
 
     TurnoDto findTurnoFindId (Long id);
 
-    Map<String, String> deleteById (ClaveForm clave, Long id, Long idPersona);
+    Map<String, String> deleteById (ClaveForm clave, Long id, Long idOrganization);
 
-    TurnoDto updateTurno (Long id, TurnoDto turno, Long idPersona);
+    TurnoDto updateTurno (Long id, TurnoDto turno, Long idOrganization);
 
     List<TurnoDto> listOfTurno (Integer page);
     Turno findEntityById(Long id);

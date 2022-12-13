@@ -22,5 +22,5 @@ public class TurnoDto {
     @JsonDeserialize(using = CustomLocalDateDeserializer.class)
     private LocalDate fechaTurno;
     private LocalTime horaTurno;
-    private String clavePersona;
+    private String claveOrganization;
 }

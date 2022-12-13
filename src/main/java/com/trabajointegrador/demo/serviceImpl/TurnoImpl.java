@@ -5,11 +5,11 @@ import com.trabajointegrador.demo.dto.TurnoDto;
 import com.trabajointegrador.demo.exception.BadRequestException;
 import com.trabajointegrador.demo.exception.NotFoundException;
 import com.trabajointegrador.demo.model.Evento;
-import com.trabajointegrador.demo.model.Personas;
+import com.trabajointegrador.demo.model.Organization;
 import com.trabajointegrador.demo.model.Turno;
 import com.trabajointegrador.demo.repository.TurnoRepository;
 import com.trabajointegrador.demo.service.EventoService;
-import com.trabajointegrador.demo.service.PersonasService;
+import com.trabajointegrador.demo.service.OrganizationService;
 import com.trabajointegrador.demo.service.TurnoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,21 +29,21 @@ public class TurnoImpl implements TurnoService {
     @Autowired
     private EventoService eventoService;
     @Autowired
-    private PersonasService personaService;
+    private OrganizationService organizationService;
 
     @Autowired
     public ModelMapper modelMapper;
 
 
     @Override
-    public TurnoDto createTurno(Long idEvento, Long idPersona, TurnoDto dto) {
+    public TurnoDto createTurno(Long idEvento, Long idOrganizacion, TurnoDto dto) {
         isTurnoValid(dto.getFechaTurno());
         Evento eventoFound = eventoService.findEntityById(idEvento);
-        Personas personaFound = personaService.findEntityById(idPersona);
-        isClaveCorrect(personaFound, dto.getClavePersona());
+        Organization organizationFound = organizationService.findEntityById(idOrganizacion);
+        isClaveCorrect(organizationFound, dto.getClaveOrganization());
         if(eventoFound.getEstado().equals("INACTIVO")) throw new BadRequestException("el evento no esta activo");
         Turno entity = modelMapper.map(dto, Turno.class);
-        entity.setPersona(personaFound);
+//        entity.setPersona(personaFound);
         entity.setEvento(eventoFound);
 
         if(eventoFound.getPeriodicidad().equals("UNICO") && (eventoFound.getHora()!=null || eventoFound.getFecha()!=null)) {
@@ -58,7 +58,7 @@ public class TurnoImpl implements TurnoService {
         }
         Turno turnoSaved = turnoRepository.save(entity);
         TurnoDto turnoDto = modelMapper.map(turnoSaved, TurnoDto.class);
-        turnoDto.setClavePersona(null);
+        turnoDto.setClaveOrganization(null);
         return turnoDto;
     }
 
@@ -66,7 +66,7 @@ public class TurnoImpl implements TurnoService {
     public TurnoDto findTurnoFindId(Long id) {
         Turno turno = findEntityById(id);
         TurnoDto dto = modelMapper.map(turno, TurnoDto.class);
-        dto.setClavePersona(null);
+        dto.setClaveOrganization(null);
         return dto;
     }
 
@@ -75,26 +75,26 @@ public class TurnoImpl implements TurnoService {
     }
 
     @Override
-    public Map<String, String> deleteById(ClaveForm clave, Long id, Long idPersona) {
+    public Map<String, String> deleteById(ClaveForm clave, Long id, Long idOrganization) {
         Turno turnoFound = findEntityById(id);
-        Personas personaFound = personaService.findEntityById(idPersona);
-        isClaveCorrect(personaFound, clave.getClave());
+        Organization organizationFound = organizationService.findEntityById(idOrganization);
+        isClaveCorrect(organizationFound, clave.getClave());
         turnoRepository.delete(turnoFound);
         return new HashMap<String, String>(){{put("Message", "turno id " + id + " ha sido elimindo");}};
     }
 
 
     @Override
-    public TurnoDto updateTurno (Long id, TurnoDto dto, Long idPersona) {
+    public TurnoDto updateTurno (Long id, TurnoDto dto, Long idOrganization) {
         Turno turnoFound = findEntityById(id);
         isTurnoValid(dto.getFechaTurno());
-        Personas personaFound = personaService.findEntityById(idPersona);
-        isClaveCorrect(personaFound, turnoFound.getPersona().getClave());
+        Organization organizationFound = organizationService.findEntityById(idOrganization);
+        isClaveCorrect(organizationFound, turnoFound.getPersona().getClave());
         modelMapper.getConfiguration().setSkipNullEnabled(true);
         modelMapper.map(dto, turnoFound);
         Turno turnoSaved = turnoRepository.save(turnoFound);
         TurnoDto turnoDto = modelMapper.map(turnoSaved, TurnoDto.class);
-        turnoDto.setClavePersona(null);
+        turnoDto.setClaveOrganization(null);
         return turnoDto;
     }
 
@@ -103,11 +103,11 @@ public class TurnoImpl implements TurnoService {
     @Override
     public List<TurnoDto> listOfTurno(Integer page) {
         List<TurnoDto> dto =turnoRepository.findAll(PageRequest.of(page, SIZE_PAGE)).map(turno -> modelMapper.map(turno, TurnoDto.class)).getContent();
-        dto.forEach(d-> d.setClavePersona(null));
+        dto.forEach(d-> d.setClaveOrganization(null));
         return dto;
     }
-    public void isClaveCorrect(Personas persona, String clave){
-        if(!persona.getClave().equals(clave)) throw new BadRequestException("clave incorrecta");
+    public void isClaveCorrect(Organization organization, String clave){
+        if(!organization.getClave().equals(clave)) throw new BadRequestException("clave incorrecta");
     }
     public void isTurnoValid(LocalDate fecha){
         if(fecha.isBefore(LocalDate.now())) throw new BadRequestException("el turno se encuentra vencido, debe ser posterior al día de la fecha");

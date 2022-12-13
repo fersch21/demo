@@ -15,6 +15,6 @@ public interface EventoService {
     List<EventoDto> listOfEvento(Integer page);
 
     Evento findEntityById (Long id);
-//    debo implementar en enum periodicidad.-
+
 }
 
