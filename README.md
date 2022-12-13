@@ -1,7 +1,8 @@
-Informatorio 2022 Java-Spring                              SWAGGER: http://localhost:8080/swagger-ui/index.html#/
+                         SWAGGER: http://localhost:8080/swagger-ui/index.html#/
 
+
+Informatorio 2022 Java-Spring
 Trabajo práctico integrador
-
 
 Crear una API rest para poder sacar turnos para cualquier evento o motivo que cualquier empresa  u organización cargue en el sistema.
 No es necesario estar autenticado para interactuar con la API.
