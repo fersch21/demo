@@ -1,4 +1,4 @@
-Informatorio 2022 Java-Spring                 URL UTILIZADA EN SWAGGER: http://localhost:8080/swagger-ui/index.html#/
+Informatorio 2022 Java-Spring                              SWAGGER: http://localhost:8080/swagger-ui/index.html#/
 
 Trabajo práctico integrador
 
