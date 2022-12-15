@@ -5,6 +5,7 @@ import com.trabajointegrador.demo.dto.EventoDto;
 import com.trabajointegrador.demo.exception.BadRequestException;
 import com.trabajointegrador.demo.exception.MessageCustom;
 import com.trabajointegrador.demo.exception.NotFoundException;
+import com.trabajointegrador.demo.model.Estado;
 import com.trabajointegrador.demo.model.Evento;
 import com.trabajointegrador.demo.model.Organization;
 import com.trabajointegrador.demo.model.Periodicidad;
@@ -33,12 +34,7 @@ public class EventoImpl implements EventoService {
     public EventoDto createEvento(Long IdOrg, EventoDto eventoDto) {
         Organization organization = organizationService.findEntityById(IdOrg);
         organizationService.isClaveCorrect(organization, eventoDto.getClaveOrganizacion());
-        if(eventoDto.getEstado()== null) throw new BadRequestException("Tiene que indicar si el evento esta activo o no");
-        if(eventoDto.getPeriodicidad()== null ) throw new BadRequestException("Tiene que indicar la periodicidad del evento");
-        if(eventoDto.getPeriodicidad().equals(Periodicidad.UNICO) && (eventoDto.getHora() == null || eventoDto.getFecha() == null))
-            throw new BadRequestException("El evento es unico, tiene que seleccionar fecha y hora");
-        if(eventoDto.getPeriodicidad().equals(Periodicidad.RECURRENTE) && (eventoDto.getHora() != null || eventoDto.getFecha() != null ))
-            throw new BadRequestException("El evento es periodico, no puede tener una sola fecha y horario");
+        isValid(organization, eventoDto);
         Evento eventoToSave = modelMapper.map(eventoDto, Evento.class);
         eventoToSave.setOrganization(organization);
         Evento eventoSaved = eventoRepository.save(eventoToSave);
@@ -70,14 +66,26 @@ public class EventoImpl implements EventoService {
     public EventoDto updateEvento(Long idOrg, Long id, EventoDto dto) {
         Organization organizationFound = organizationService.findEntityById(idOrg);
         Evento entityFound = findEntityById(id);
+        isValid(organizationFound, dto);
         organizationService.isClaveCorrect(organizationFound, dto.getClaveOrganizacion());
         modelMapper.getConfiguration().setSkipNullEnabled(true);
         modelMapper.map(dto, entityFound);
         Evento eventoSaved = eventoRepository.save(entityFound);
         return modelMapper.map(eventoSaved, EventoDto.class);
     }
+
     @Override
     public List<EventoDto> listOfEvento(Integer page) {
         return eventoRepository.findAll(PageRequest.of(page, SIZE_PAGE)).map(evento -> modelMapper.map(evento, EventoDto.class)).getContent();
+    }
+    public void isValid(Organization organization, EventoDto dto){
+        if(organization.getEventos().stream().anyMatch(evento -> dto.getEstado().equals(Estado.ACTIVO) && dto.getNombre().equals(evento.getNombre()) && evento.getEstado().equals(Estado.ACTIVO))) throw new BadRequestException("ya existe un evento activo con ese nombre");
+        if(organization.getEventos().stream().anyMatch(evento -> evento.getNombre()== dto.getNombre() && evento.getEstado().equals(Estado.ACTIVO))) throw new BadRequestException("ya existe un evento activo con ese nombre");
+        if(dto.getEstado()== null) throw new BadRequestException("Tiene que indicar si el evento esta activo o no");
+        if(dto.getPeriodicidad()== null ) throw new BadRequestException("Tiene que indicar si es UNICO O RECURRENTE");
+        if(dto.getPeriodicidad().equals(Periodicidad.UNICO) && (dto.getHora() == null || dto.getFecha() == null))
+            throw new BadRequestException("El evento es UNICO, tiene que seleccionar fecha y hora");
+        if(dto.getPeriodicidad().equals(Periodicidad.RECURRENTE) && (dto.getHora() != null || dto.getFecha() != null ))
+            throw new BadRequestException("El evento es RECURRENTE, no puede tener una sola fecha y horario");
     }
 }

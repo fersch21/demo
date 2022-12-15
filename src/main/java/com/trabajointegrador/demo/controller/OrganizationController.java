@@ -44,4 +44,12 @@ public class OrganizationController {
     public ResponseEntity<MessageCustom> updateClave(@PathVariable Long id, @RequestBody ClaveUpdate claveUpdate){
         return ResponseEntity.ok(organizationService.updateClave(id, claveUpdate));
     }
+    @GetMapping("/filtro")
+    public ResponseEntity<?> getAllAndFilterByCuitAndNombre(@RequestParam(required = false) String cuit,
+                                                            @RequestParam(required = false) String nombre){
+        if(cuit!=null) return ResponseEntity.ok(organizationService.buscarPorCuit(cuit));
+        if(nombre!=null) return ResponseEntity.ok(organizationService.buscarPorNombre(nombre));
+        return ResponseEntity.ok(organizationService.getAll());
+    }
+
 }

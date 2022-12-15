@@ -17,6 +17,7 @@ public class Personas {
     private Long id;
     private String name;
     private String apellido;
+    @Column(unique = true)
     private String dni;
     private String clave;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "persona")

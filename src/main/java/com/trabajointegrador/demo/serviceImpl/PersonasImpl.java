@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class PersonasImpl implements PersonasService {
@@ -81,6 +82,7 @@ public class PersonasImpl implements PersonasService {
     public void isClaveCorrect(Personas persona, String clave){
         if(!persona.getClave().equals(clave)) throw new BadRequestException("clave incorrecta");
     }
+
     public final Integer SIZE_PAGE = 20;
 
     @Override
@@ -88,5 +90,23 @@ public class PersonasImpl implements PersonasService {
         List<PersonasDto> dtoList = personasRepository.findAll(PageRequest.of(page, SIZE_PAGE)).map(personas -> modelMapper.map(personas, PersonasDto.class)).getContent();
         dtoList.forEach(dto-> dto.setClave(null));
         return dtoList;
+    }
+
+    @Override
+    public List<PersonasDto> buscarPorApellido(String apellido) {
+        if(!personasRepository.existsByApellido(apellido)) throw new BadRequestException("No hay personas con ese apellido");
+        List<Personas> personasList = personasRepository.findByApellido(apellido);
+        return personasList.stream().map(persona-> modelMapper.map(persona, PersonasDto.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public PersonasDto buscarPorDni(String dni) {
+        Personas persona = personasRepository.findByDni(dni).orElseThrow(()-> new BadRequestException("No existe una persona con ese dni"));
+        return modelMapper.map(persona, PersonasDto.class);
+    }
+
+    @Override
+    public List<PersonasDto> getAll() {
+        return personasRepository.findAll().stream().map(persona-> modelMapper.map(persona, PersonasDto.class)).collect(Collectors.toList());
     }
 }

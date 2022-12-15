@@ -27,5 +27,7 @@ public interface PersonasService {
     MessageCustom updateClave(Long idPersona, ClaveUpdate claveUpdate);
 
     void isClaveCorrect(Personas persona, String clave);
-
+    List<PersonasDto> buscarPorApellido(String apellido);
+    PersonasDto buscarPorDni(String dni);
+    List<PersonasDto> getAll();
 }

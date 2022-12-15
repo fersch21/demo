@@ -5,13 +5,12 @@ import com.trabajointegrador.demo.dto.ClaveForm;
 import com.trabajointegrador.demo.dto.TurnoDto;
 import com.trabajointegrador.demo.model.Turno;
 
-
 import java.util.List;
 import java.util.Map;
 
 public interface TurnoService {
 
-    TurnoDto createTurno (Long idEvento, Long idOrganization, TurnoDto turno);
+    TurnoDto createTurno(Long idEvento, Long idPersona, TurnoDto dto);
 
     TurnoDto findTurnoFindId (Long id);
 
@@ -20,5 +19,8 @@ public interface TurnoService {
     TurnoDto updateTurno (Long id, TurnoDto turno, Long idOrganization);
 
     List<TurnoDto> listOfTurno (Integer page);
+
     Turno findEntityById(Long id);
+
+    List<TurnoDto> getAll(Long idOrg, Long idEvento, String estado);
 }

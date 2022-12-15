@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -84,4 +85,23 @@ public class OrganizationImpl implements OrganizationService {
     public void isClaveCorrect(Organization organization, String clave){
         if(!organization.getClave().equals(clave)) throw new BadRequestException("la clave es incorrecta");
     }
+
+    @Override
+    public List<OrganizationDto> buscarPorCuit (String cuit) {
+        if(!organizationRespository.existsByCuit(cuit)) throw new BadRequestException("No hay organizaciones con ese cuit");
+        List<Organization> organizationsList = organizationRespository.findByCuit(cuit);
+        return organizationsList.stream().map(organization-> modelMapper.map(organization, OrganizationDto.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public OrganizationDto buscarPorNombre(String nombre) {
+        Object organization = organizationRespository.findByNombre(nombre).orElseThrow(()-> new BadRequestException("No existe una organization con ese nombre"));
+        return modelMapper.map(organization, OrganizationDto.class);
+    }
+
+    @Override
+    public List<OrganizationDto> getAll() {
+        return organizationRespository.findAll().stream().map(organization-> modelMapper.map(organization, OrganizationDto.class)).collect(Collectors.toList());
+    }
+
 }

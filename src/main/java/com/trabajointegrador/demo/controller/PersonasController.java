@@ -44,6 +44,13 @@ public class PersonasController {
     public ResponseEntity<MessageCustom> updateClave(@PathVariable Long id, @RequestBody ClaveUpdate claveUpdate){
         return ResponseEntity.ok(personasService.updateClave(id, claveUpdate));
     }
+    @GetMapping("/filtro")
+    public ResponseEntity<?> getAllAndFilterByDniAndApellido(@RequestParam(required = false) String apellido,
+                                                             @RequestParam(required = false) String dni){
+        if(apellido!=null) return ResponseEntity.ok(personasService.buscarPorApellido(apellido));
+        if(dni!=null) return ResponseEntity.ok(personasService.buscarPorDni(dni));
+        return ResponseEntity.ok(personasService.getAll());
+    }
 }
 
 

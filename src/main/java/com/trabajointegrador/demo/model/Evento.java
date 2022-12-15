@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -18,7 +19,9 @@ public class Evento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message= "el nombre no debe estar vacio")
     private String nombre;
+    @NotBlank(message= "la ubicación no debe estar vacia")
     private String ubicacion;
     @Enumerated(value = EnumType.STRING)
     private Estado estado;

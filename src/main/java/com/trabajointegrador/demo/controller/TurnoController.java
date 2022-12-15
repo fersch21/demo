@@ -17,9 +17,9 @@ public class TurnoController {
     @Autowired
     private TurnoService turnoService;
 
-    @PostMapping("/evento/{idEvento}/persona/{idOrganization}")
-    public ResponseEntity<TurnoDto> create(@PathVariable Long idEvento, @PathVariable Long idOrganization, @Valid @RequestBody TurnoDto turno){
-        return ResponseEntity.status(201).body(turnoService.createTurno(idEvento, idOrganization, turno));
+    @PostMapping("/evento/{idEvento}/persona/{idPersona}")
+    public ResponseEntity<TurnoDto> create(@PathVariable Long idEvento, @PathVariable Long idPersona, @Valid @RequestBody TurnoDto turno){
+        return ResponseEntity.status(201).body(turnoService.createTurno(idEvento, idPersona, turno));
     }
     @DeleteMapping("/{id}/persona/{idPersona}")
     public ResponseEntity<Map<String, String>> deleteById(@PathVariable Long id, @PathVariable Long idPersona,@RequestBody ClaveForm clave){
@@ -37,5 +37,10 @@ public class TurnoController {
     @GetMapping("/{id}")
     public ResponseEntity<TurnoDto> findById(@PathVariable Long id){
         return ResponseEntity.ok(turnoService.findTurnoFindId(id));
+    }
+
+    @GetMapping("/filtro/organizacion/{idOrg}/evento/{idEvento}")
+    public ResponseEntity<?> FilterByOrgAndEvento(@PathVariable Long idOrg, @PathVariable Long idEvento,  @RequestParam String estado){
+    return ResponseEntity.ok(turnoService.getAll(idOrg, idEvento, estado));
     }
 }

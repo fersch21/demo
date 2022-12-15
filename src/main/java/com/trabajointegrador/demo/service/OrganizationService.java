@@ -21,5 +21,11 @@ public interface OrganizationService {
 
      void isClaveCorrect(Organization organization, String clave);
 
+     List<OrganizationDto> buscarPorCuit(String cuit);
+
+     OrganizationDto buscarPorNombre(String nombre);
+     List<OrganizationDto> getAll();
+
+
 }
 

@@ -1,4 +1,5 @@
-                         SWAGGER: http://localhost:8080/swagger-ui/index.html#/
+SWAGGER
+http://localhost:8080/swagger-ui/index.html#/
 
 
 Informatorio 2022 Java-Spring
@@ -20,7 +21,7 @@ en la que la creó la organización,  también se deberá indicar si es algo oca
 como por ejemplo un recital, una convención o si será algo recurrente es decir que suceda todos los días por ejemplo ir al medico, turno 
 para ir a un gimnasio, ir a un bar etc. 
 ●	En  caso de que sea un evento único u ocasional la persona no deberá ingresar la fecha ya que la fecha es única y ya la cargo la organización en el evento
-●	En caso de que sea un evento recurrente del día a día deberá indicar la fecha y la hora.(No puede haber dos turnos con la misma fecha y hora) y debe haber
+●	En caso de que sea un evento recurrente del día a día deberá indicar la fecha y la hora.(No puede haber dos turnos con la misma fecha y hora)
 ●	Una empresa no podrá tener más de 1 eventos con el mismo nombre activos
 
 Persona: Una persona podrá sacar un turno para algún evento, no necesita estar registrado, deberá enviar el/los nombre/s de la persona, su apellido, su dni,
